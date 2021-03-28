@@ -26,7 +26,7 @@ function emitExitSignal() {
 }
 
 async function exitGracefully(err: Error) {
-  if (err instanceof Signal) console.error(err)
+  if (!(err instanceof Signal)) console.error(err)
 
   await series(cleanups)
 
