@@ -1,25 +1,19 @@
 import { series } from 'extra-promise'
 import { CustomError } from '@blackglory/errors'
+import { Awaitable } from 'justypes'
 
-type ICleanup = () => void | PromiseLike<void>
+type ICleanup = () => Awaitable<void>
 type ICancel = () => void
+
+class Signal extends CustomError {}
 
 const cleanups: Set<ICleanup> = new Set()
 
 process.once('uncaughtException', exitGracefully)
 process.once('SIGINT', emitExitSignal)
 process.once('SIGTERM', emitExitSignal)
-
-export default youDied
-export function youDied(cleanup: ICleanup): ICancel {
-  const fn = () => cleanup()
-
-  cleanups.add(fn)
-
-  return () => cleanups.delete(fn)
-}
-
-class Signal extends CustomError {}
+// 在uncaughtException里执行的process.exit不会再次发出exit事件, 所以不会意外调用emitExitSignal
+process.once('exit', emitExitSignal)
 
 function emitExitSignal() {
   throw new Signal()
@@ -30,5 +24,14 @@ async function exitGracefully(err: Error) {
 
   await series(cleanups)
 
-  process.exit(err instanceof Signal ? 0 : 1)
+  process.exit(process.exitCode ?? (err instanceof Signal ? 0 : 1))
+}
+
+export default youDied
+export function youDied(cleanup: ICleanup): ICancel {
+  const fn = () => cleanup()
+
+  cleanups.add(fn)
+
+  return () => cleanups.delete(fn)
 }

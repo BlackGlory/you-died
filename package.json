@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@blackglory/errors": "^2.2.1",
-    "extra-promise": "^1.0.2"
+    "extra-promise": "^1.0.2",
+    "justypes": "^2.0.0"
   }
 }
