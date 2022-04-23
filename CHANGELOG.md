@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/BlackGlory/you-died/compare/v0.3.1...v0.4.0) (2022-04-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* stop listening exit event
+
+### Features
+
+* stop listening exit event ([9e520d0](https://github.com/BlackGlory/you-died/commit/9e520d06c76094633cc62ee8d2b4f26888018298))
+
 ### [0.3.1](https://github.com/BlackGlory/you-died/compare/v0.3.0...v0.3.1) (2022-04-23)
 
 ## [0.3.0](https://github.com/BlackGlory/you-died/compare/v0.2.2...v0.3.0) (2022-04-17)
