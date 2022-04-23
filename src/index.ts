@@ -12,14 +12,13 @@ const cleanups = new Destructor()
 process.once('uncaughtException', exitGracefully)
 process.once('SIGINT', emitExitSignal)
 process.once('SIGTERM', emitExitSignal)
-// 在uncaughtException里执行的process.exit不会再次发出exit事件, 所以不会意外调用emitExitSignal
-process.once('exit', emitExitSignal)
+// 无法监听exit事件, 因为exit有特殊性, 当调用process.exit时, Node.js内的很多功能会停止, 导致无法优雅退出.
 
 function emitExitSignal() {
   throw new Signal()
 }
 
-async function exitGracefully(err: Error) {
+async function exitGracefully(err: Error): Promise<never> {
   if (!(err instanceof Signal)) console.error(err)
 
   await cleanups.execute()
