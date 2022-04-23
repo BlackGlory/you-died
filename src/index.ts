@@ -1,13 +1,13 @@
-import { series } from 'extra-promise'
 import { CustomError } from '@blackglory/errors'
 import { Awaitable } from 'justypes'
+import { Destructor } from 'extra-defer'
 
 type ICleanup = () => Awaitable<void>
 type ICancel = () => void
 
 class Signal extends CustomError {}
 
-const cleanups: Set<ICleanup> = new Set()
+const cleanups = new Destructor()
 
 process.once('uncaughtException', exitGracefully)
 process.once('SIGINT', emitExitSignal)
@@ -22,7 +22,7 @@ function emitExitSignal() {
 async function exitGracefully(err: Error) {
   if (!(err instanceof Signal)) console.error(err)
 
-  await series(cleanups)
+  await cleanups.execute()
 
   process.exit(process.exitCode ?? (err instanceof Signal ? 0 : 1))
 }
@@ -31,7 +31,7 @@ export default youDied
 export function youDied(cleanup: ICleanup): ICancel {
   const fn = () => cleanup()
 
-  cleanups.add(fn)
+  cleanups.defer(fn)
 
-  return () => cleanups.delete(fn)
+  return () => cleanups.remove(fn)
 }

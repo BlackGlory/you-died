@@ -2802,6 +2802,14 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+extra-defer@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/extra-defer/-/extra-defer-0.2.2.tgz#a0b9e047667e560d94df220fb6884606d1cf4c78"
+  integrity sha512-pfrvAGXtY5nTPO+DwBEuwCH9chKJ4r7ydApEXW/5FfqMeLlzKBMvqbQIGyhsb/13m7JHtfZVVAgn01o+N2jgHQ==
+  dependencies:
+    "@blackglory/pass" "^1.0.0"
+    extra-promise "^1.0.2"
+
 extra-generator@^0.2.16:
   version "0.2.16"
   resolved "https://registry.yarnpkg.com/extra-generator/-/extra-generator-0.2.16.tgz#8b1478cc4ad7e181254407980d27e97e3c012b71"
