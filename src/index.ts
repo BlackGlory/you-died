@@ -1,36 +1,43 @@
-import { CustomError } from '@blackglory/errors'
 import { Awaitable } from 'justypes'
 import { Destructor } from 'extra-defer'
+import { isExitSignal, throwExitSignal } from './exit-signal'
 
 type ICleanup = () => Awaitable<void>
-type ICancel = () => void
+type ICancelCleanup = () => void
 
-class Signal extends CustomError {}
-
-const cleanups = new Destructor()
-
-process.once('uncaughtException', exitGracefully)
-process.once('SIGINT', emitExitSignal)
-process.once('SIGTERM', emitExitSignal)
-// 无法监听exit事件, 因为exit有特殊性, 当调用process.exit时, Node.js内的很多功能会停止, 导致无法优雅退出.
-
-function emitExitSignal() {
-  throw new Signal()
+enum ExitCode {
+  Success = 0
+, Failure = 1
 }
 
-async function exitGracefully(err: Error): Promise<never> {
-  if (!(err instanceof Signal)) console.error(err)
+const cleanups = new Destructor()
+process.once('uncaughtException', exitGracefully)
+process.once('SIGINT', throwExitSignal)
+process.once('SIGTERM', throwExitSignal)
+// 无法监听exit事件:
+// exit有特殊性, 当调用process.exit时, Node.js内的很多功能会停止, 导致无法优雅退出.
 
-  await cleanups.execute()
+export function youDied(cleanup: ICleanup): ICancelCleanup {
+  cleanups.defer(fn)
+  return () => cleanups.remove(fn)
 
-  process.exit(process.exitCode ?? (err instanceof Signal ? 0 : 1))
+  // 确保每一个cleanup都独一无二
+  function fn() {
+    cleanup()
+  }
 }
 
 export default youDied
-export function youDied(cleanup: ICleanup): ICancel {
-  const fn = () => cleanup()
 
-  cleanups.defer(fn)
-
-  return () => cleanups.remove(fn)
+async function exitGracefully(err: Error): Promise<never> {
+  if (isExitSignal(err)) {
+    // SIGINT/SIGTERM引起的退出
+    await cleanups.execute()
+    process.exit(process.exitCode ?? ExitCode.Success)
+  } else {
+    // 不是SIGINT/SIGTERM引起的退出
+    console.error(err)
+    await cleanups.execute()
+    process.exit(process.exitCode ?? ExitCode.Failure)
+  }
 }
