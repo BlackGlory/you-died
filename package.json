@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@blackglory/errors": "^2.4.1",
-    "extra-defer": "^0.2.5",
+    "extra-defer": "^0.2.7",
     "justypes": "^4.0.0"
   }
 }

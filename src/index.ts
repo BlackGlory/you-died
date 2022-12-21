@@ -11,23 +11,26 @@ enum ExitCode {
 }
 
 const cleanups = new Destructor()
-process.once('uncaughtException', exitGracefully)
-process.once('SIGINT', throwExitSignal)
-process.once('SIGTERM', throwExitSignal)
-// 无法监听exit事件:
-// exit有特殊性, 当调用process.exit时, Node.js内的很多功能会停止, 导致无法优雅退出.
 
+export default youDied
 export function youDied(cleanup: ICleanup): ICancelCleanup {
+  if (cleanups.size === 0) {
+    install()
+  }
   cleanups.defer(fn)
-  return () => cleanups.remove(fn)
+
+  return () => {
+    cleanups.remove(fn)
+    if (cleanups.size === 0) {
+      uninstall()
+    }
+  }
 
   // 确保每一个cleanup都独一无二
   function fn() {
     cleanup()
   }
 }
-
-export default youDied
 
 async function exitGracefully(err: Error): Promise<never> {
   if (isExitSignal(err)) {
@@ -40,4 +43,20 @@ async function exitGracefully(err: Error): Promise<never> {
     await cleanups.execute()
     process.exit(process.exitCode ?? ExitCode.Failure)
   }
+}
+
+function install(): void {
+  // 注意, 你可能想监听exit事件, 但该事件实际上是无法使用的:
+  // 当调用process.exit(触发exit事件)时, Node.js内的许多功能会停止, 此时大部分代码已经无法正常执行.
+
+  // 通过prepend来让事件监听器尽早被运行
+  process.prependOnceListener('uncaughtException', exitGracefully)
+  process.prependOnceListener('SIGINT', throwExitSignal)
+  process.prependOnceListener('SIGTERM', throwExitSignal)
+}
+
+function uninstall(): void {
+  process.removeListener('uncaughtException', exitGracefully)
+  process.removeListener('SIGINT', throwExitSignal)
+  process.removeListener('SIGTERM', throwExitSignal)
 }
