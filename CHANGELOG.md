@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.4](https://github.com/BlackGlory/you-died/compare/v0.4.3...v0.4.4) (2023-06-11)
+
+
+### Bug Fixes
+
+* export src ([6c9e110](https://github.com/BlackGlory/you-died/commit/6c9e110e2babe3f111f5ec360e576b677a0bc4f1))
+
 ### [0.4.3](https://github.com/BlackGlory/you-died/compare/v0.4.2...v0.4.3) (2022-12-21)
 
 ### [0.4.2](https://github.com/BlackGlory/you-died/compare/v0.4.1...v0.4.2) (2022-08-28)
