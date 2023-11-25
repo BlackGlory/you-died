@@ -45,9 +45,10 @@ This module listens to these events:
 - `uncaughtException`
 - `SIGINT`
 - `SIGTERM`
+- `SIGBREAK`
 
-POSIX signal events will throw an error named `Signal`,
-which is caught by the `uncaughtException` handler function.
+Signal event handlers will throw an error named `Signal`,
+which is caught by the `uncaughtException` handler.
 
 ## API
 ### youDied

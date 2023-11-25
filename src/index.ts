@@ -53,10 +53,12 @@ function install(): void {
   process.prependOnceListener('uncaughtException', exitGracefully)
   process.prependOnceListener('SIGINT', throwExitSignal)
   process.prependOnceListener('SIGTERM', throwExitSignal)
+  process.prependOnceListener('SIGBREAK', throwExitSignal)
 }
 
 function uninstall(): void {
   process.removeListener('uncaughtException', exitGracefully)
   process.removeListener('SIGINT', throwExitSignal)
   process.removeListener('SIGTERM', throwExitSignal)
+  process.prependOnceListener('SIGBREAK', throwExitSignal)
 }
