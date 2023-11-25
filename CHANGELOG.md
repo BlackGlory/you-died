@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.5](https://github.com/BlackGlory/you-died/compare/v0.4.4...v0.4.5) (2023-11-25)
+
+
+### Features
+
+* add SIGBREAK support ([1324011](https://github.com/BlackGlory/you-died/commit/13240119a07c2bd7e72aa4142d6ca77017901b60))
+
 ### [0.4.4](https://github.com/BlackGlory/you-died/compare/v0.4.3...v0.4.4) (2023-06-11)
 
 
