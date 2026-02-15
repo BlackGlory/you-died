@@ -14,21 +14,19 @@ const cleanups = new Destructor()
 
 export default youDied
 export function youDied(cleanup: ICleanup): ICancelCleanup {
-  if (cleanups.size === 0) {
-    install()
-  }
+  if (cleanups.size === 0) install()
+
   cleanups.defer(fn)
 
   return () => {
     cleanups.remove(fn)
-    if (cleanups.size === 0) {
-      uninstall()
-    }
+
+    if (cleanups.size === 0) uninstall()
   }
 
   // 确保每一个cleanup都独一无二
-  function fn() {
-    cleanup()
+  function fn(): Awaitable<void> {
+    return cleanup()
   }
 }
 
