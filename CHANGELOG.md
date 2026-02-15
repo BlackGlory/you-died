@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.6](https://github.com/BlackGlory/you-died/compare/v0.4.5...v0.4.6) (2026-02-15)
+
+
+### Bug Fixes
+
+* **uninstall:** remove the SIGBREAK event listener ([53824c2](https://github.com/BlackGlory/you-died/commit/53824c29da6591dcd9766e4539c8bc0ae6ed22db))
+* serial execution asynchronous cleanups ([ec8500c](https://github.com/BlackGlory/you-died/commit/ec8500c3172a94342b60eea305955233f51c12ca))
+
 ### [0.4.5](https://github.com/BlackGlory/you-died/compare/v0.4.4...v0.4.5) (2023-11-25)
 
 
